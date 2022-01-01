@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:123456@127.0.0.1:27017/admin?authSource=admin&authMechanism=SCRAM-SHA-1
+      auto-index-creation: false
+      repositories:
+        type: reactive
