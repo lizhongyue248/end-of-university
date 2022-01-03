@@ -23,10 +23,6 @@ import java.time.LocalDateTime
 @EnableReactiveMongoRepositories(repositoryFactoryBeanClass = ExpandRepositoryFactoryBean::class)
 class MongodbConfig {
 
-  @Bean
-  fun passwordEncoder(): PasswordEncoder =
-    PasswordEncoderFactories.createDelegatingPasswordEncoder()
-
 //  @Bean
 //  @Order(99)
 //  @Suppress("UsePropertyAccessSyntax", "USELESS_CAST")
