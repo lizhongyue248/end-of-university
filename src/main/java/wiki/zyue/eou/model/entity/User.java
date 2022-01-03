@@ -3,6 +3,7 @@ package wiki.zyue.eou.model.entity;
 import static java.util.Collections.emptyList;
 
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,11 +18,15 @@ import wiki.zyue.eou.base.BaseEntity;
  */
 @Entity
 @Document
-public class User extends BaseEntity<User>  {
+public class User extends BaseEntity<User> implements UserDetails  {
 
   private String username;
 
   private String password;
+
+  private String phone;
+
+  private String email;
 
   private Boolean isExpired = false;
 
@@ -106,11 +111,56 @@ public class User extends BaseEntity<User>  {
     return this;
   }
 
+  public String getPhone() {
+    return phone;
+  }
+
+  public User setPhone(String phone) {
+    this.phone = phone;
+    return this;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public User setEmail(String email) {
+    this.email = email;
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof User user)) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    return Objects.equals(getUsername(), user.getUsername()) && Objects.equals(
+        getPassword(), user.getPassword()) && Objects.equals(getPhone(), user.getPhone())
+        && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(
+        isExpired, user.isExpired) && Objects.equals(isLocked, user.isLocked)
+        && Objects.equals(isCredentialsExpired, user.isCredentialsExpired)
+        && Objects.equals(getRoles(), user.getRoles());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), getUsername(), getPassword(), getPhone(), getEmail(),
+        isExpired, isLocked, isCredentialsExpired, getRoles());
+  }
+
   @Override
   public String toString() {
     return "User{" +
         "username='" + username + '\'' +
         ", password='" + password + '\'' +
+        ", phone='" + phone + '\'' +
+        ", email='" + email + '\'' +
         ", isExpired=" + isExpired +
         ", isLocked=" + isLocked +
         ", isCredentialsExpired=" + isCredentialsExpired +

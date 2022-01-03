@@ -7,6 +7,8 @@ import org.springframework.core.annotation.Order
 import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.mapping.event.ReactiveBeforeConvertCallback
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
+import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.crypto.password.PasswordEncoder
 import wiki.zyue.eou.base.BaseEntity
 import wiki.zyue.eou.base.impl.ExpandRepositoryFactoryBean
 import wiki.zyue.eou.base.impl.ExpandRepositoryImpl
@@ -20,6 +22,10 @@ import java.time.LocalDateTime
 //@EnableMongoAuditing
 @EnableReactiveMongoRepositories(repositoryFactoryBeanClass = ExpandRepositoryFactoryBean::class)
 class MongodbConfig {
+
+  @Bean
+  fun passwordEncoder(): PasswordEncoder =
+    PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
 //  @Bean
 //  @Order(99)
