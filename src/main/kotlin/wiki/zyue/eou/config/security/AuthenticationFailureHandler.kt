@@ -14,6 +14,6 @@ class AuthenticationFailureHandler: ServerAuthenticationFailureHandler {
     webFilterExchange: WebFilterExchange,
     exception: AuthenticationException
   ): Mono<Void> {
-    TODO("Not yet implemented")
+    return Mono.empty()
   }
 }

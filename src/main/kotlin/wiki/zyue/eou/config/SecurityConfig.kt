@@ -13,6 +13,7 @@ import org.springframework.security.web.server.authentication.AuthenticationWebF
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers
 import wiki.zyue.eou.config.security.*
 import wiki.zyue.eou.service.AuthService
+import java.security.interfaces.RSAPublicKey
 
 /**
  * 2021/12/28 03:26:43
@@ -37,34 +38,29 @@ class SecurityConfig {
     .csrf().disable()
     .logout().disable()
     .authorizeExchange { exchanges ->
-      exchanges.pathMatchers(HttpMethod.POST, "/login").permitAll()
+      exchanges
+        .pathMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
         .anyExchange().authenticated()
     }
     .addFilterAt(authenticationFilter(), SecurityWebFiltersOrder.FORM_LOGIN)
+    .oauth2ResourceServer { resourceServer ->
+      resourceServer.jwt { jwt ->
+        jwt.publicKey(JwtUtil.getRsaPublicKey() as RSAPublicKey)
+      }
+    }
     .build()
-//    .oauth2ResourceServer { resourceServer ->
-//      resourceServer.jwt { jwt ->
-//        jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor())
-//      }
-//    }
 
   fun authenticationFilter(): AuthenticationWebFilter {
     val authenticationFilter = AuthenticationWebFilter(MultiTypeAuthenticationManager(authService))
     authenticationFilter.setRequiresAuthenticationMatcher(
-      ServerWebExchangeMatchers.pathMatchers(
-        HttpMethod.POST,
-        "/login"
-      )
+      ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, LOGIN_URL)
     )
     authenticationFilter.setAuthenticationFailureHandler(AuthenticationFailureHandler())
     authenticationFilter.setServerAuthenticationConverter(
-      MultiTypeAuthenticationConverter(
-        serverCodecConfigurer
-      )
+      MultiTypeAuthenticationConverter(serverCodecConfigurer)
     )
     authenticationFilter.setAuthenticationSuccessHandler(AuthenticationSuccessHandler())
     return authenticationFilter
   }
-
 
 }

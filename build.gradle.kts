@@ -42,7 +42,6 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
   implementation("org.springframework.security:spring-security-oauth2-jose")
-  implementation("org.springframework.security:spring-security-oauth2-client")
   implementation("org.springframework.security:spring-security-oauth2-resource-server")
   implementation("javax.validation:validation-api")
   implementation("org.jetbrains.kotlin:kotlin-reflect")

@@ -22,3 +22,12 @@ data class LoginParam(
   var password: String,
   var type: AuthenticationType
 )
+
+data class AuthenticationResponse(
+  var username: String,
+  var token: String,
+  var expire: Long,
+  val authorities: List<String>
+)
+
+const val LOGIN_URL = "/login"
