@@ -40,6 +40,8 @@ class SecurityConfig {
     .authorizeExchange { exchanges ->
       exchanges
         .pathMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
+        .pathMatchers(HttpMethod.POST, REGISTER_URL).permitAll()
+        .pathMatchers(HttpMethod.GET, CODE_URL).permitAll()
         .anyExchange().authenticated()
     }
     .addFilterAt(authenticationFilter(), SecurityWebFiltersOrder.FORM_LOGIN)

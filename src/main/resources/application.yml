@@ -5,6 +5,11 @@ spring:
       auto-index-creation: false
       repositories:
         type: reactive
+  cache:
+    redis:
+      key-prefix: eou
+      use-key-prefix: true
 logging:
   level:
     org.springframework.security: DEBUG
+    wiki.zyue.eou: DEBUG

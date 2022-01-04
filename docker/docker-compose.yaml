@@ -10,6 +10,13 @@ services:
       - "27017:27017"
     volumes:
       - db:/data/db
-
+  redis:
+    image: redis
+    restart: unless-stopped
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
 volumes:
   db:

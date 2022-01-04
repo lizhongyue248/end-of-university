@@ -10,7 +10,17 @@ import wiki.zyue.eou.model.entity.User
  * @author echo
  */
 @Repository
-interface UserRepository : BaseRepository<User>
+interface UserRepository : BaseRepository<User> {
+
+}
 
 @Repository
-interface UserCoroutineRepository: CoroutineCrudRepository<User, String>
+interface UserCoroutineRepository : CoroutineCrudRepository<User, String> {
+
+  suspend fun existsByPhone(phone: String): Boolean
+
+  suspend fun existsByEmail(email: String): Boolean
+
+  suspend fun existsByName(name: String): Boolean
+
+}

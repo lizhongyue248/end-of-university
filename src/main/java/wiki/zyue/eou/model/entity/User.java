@@ -20,8 +20,6 @@ import wiki.zyue.eou.base.BaseEntity;
 @Document
 public class User extends BaseEntity<User> implements UserDetails  {
 
-  private String username;
-
   private String password;
 
   private String phone;
@@ -46,7 +44,7 @@ public class User extends BaseEntity<User> implements UserDetails  {
   }
 
   public String getUsername() {
-    return username;
+    return getName();
   }
 
   public boolean isAccountNonExpired() {
@@ -63,11 +61,6 @@ public class User extends BaseEntity<User> implements UserDetails  {
 
   public boolean isEnabled() {
     return getEnable();
-  }
-
-  public User setUsername(String username) {
-    this.username = username;
-    return this;
   }
 
   public User setPassword(String password) {
@@ -157,14 +150,13 @@ public class User extends BaseEntity<User> implements UserDetails  {
   @Override
   public String toString() {
     return "User{" +
-        "username='" + username + '\'' +
-        ", password='" + password + '\'' +
+        "password='" + password + '\'' +
         ", phone='" + phone + '\'' +
         ", email='" + email + '\'' +
         ", isExpired=" + isExpired +
         ", isLocked=" + isLocked +
         ", isCredentialsExpired=" + isCredentialsExpired +
         ", roles=" + roles +
-        '}';
+        "} " + super.toString();
   }
 }

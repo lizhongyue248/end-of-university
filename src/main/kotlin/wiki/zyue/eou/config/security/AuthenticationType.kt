@@ -31,3 +31,6 @@ data class AuthenticationResponse(
 )
 
 const val LOGIN_URL = "/login"
+const val REGISTER_URL = "/register"
+const val CODE_URL = "/code/**"
+const val DEFAULT_ROLE = "USER"
