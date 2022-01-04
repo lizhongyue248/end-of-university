@@ -15,8 +15,11 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.BodyInserters
 import reactor.core.publisher.Mono
 import wiki.zyue.eou.config.SecurityConfig
@@ -29,7 +32,7 @@ import wiki.zyue.eou.service.AuthServiceImpl
  * 2022/1/3 23:18:42
  * @author echo
  */
-@WebFluxTest
+@WebFluxTest(controllers = [SecurityControllerMocker::class])
 @ContextConfiguration(classes = [EouApplication::class])
 @Import(SecurityConfig::class, SecurityBeanMocker::class)
 class SecurityConfigTest {
@@ -80,6 +83,27 @@ class SecurityConfigTest {
       .expectStatus()
       .is4xxClientError
   }
+
+  @Test
+  internal fun `No Authorization Test`() {
+    rest.get()
+      .uri("/test")
+      .exchange()
+      .expectStatus()
+      .isUnauthorized
+  }
+
+  @Test
+  @WithMockUser
+  internal fun `User Authorization Test`() {
+    rest.get()
+      .uri("/test")
+      .exchange()
+      .expectStatus()
+      .isOk
+      .expectBody(String::class.java)
+      .isEqualTo("test")
+  }
 }
 
 @Configuration
@@ -105,5 +129,13 @@ class SecurityBeanMocker {
       .thenThrow(UsernameNotFoundException("用户不存在"))
     return mock
   }
+
+}
+
+@RestController
+class SecurityControllerMocker {
+
+  @GetMapping("/test")
+  fun test(): Mono<String> = Mono.just("test")
 
 }
