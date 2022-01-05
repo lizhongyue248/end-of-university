@@ -1,4 +1,4 @@
-package wiki.zyue.eou
+package wiki.zyue.eou.integration
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

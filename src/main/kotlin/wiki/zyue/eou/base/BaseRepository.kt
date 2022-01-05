@@ -17,4 +17,6 @@ interface BaseRepository<E : BaseEntity<E>> : ExpandRepository<E>,
 
   fun findAllByIdContaining(ids: List<String>): Flux<E>
 
+  fun findFirstByName(name: String): Mono<E>
+
 }

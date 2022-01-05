@@ -2,6 +2,7 @@ package wiki.zyue.eou.repository
 
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 import wiki.zyue.eou.base.BaseRepository
 import wiki.zyue.eou.model.entity.User
 
@@ -11,6 +12,10 @@ import wiki.zyue.eou.model.entity.User
  */
 @Repository
 interface UserRepository : BaseRepository<User> {
+
+  fun findFirstByEmail(email: String): Mono<User>
+
+  fun findFirstByPhone(phone: String): Mono<User>
 
 }
 

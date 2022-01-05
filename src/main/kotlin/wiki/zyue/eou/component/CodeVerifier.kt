@@ -1,9 +1,11 @@
 package wiki.zyue.eou.component
 
-import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.reactor.mono
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import org.springframework.data.redis.core.getAndAwait
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
+import wiki.zyue.eou.config.security.AuthenticationType
 import wiki.zyue.eou.model.type.CodeType
 
 /**
@@ -17,9 +19,17 @@ class CodeVerifier(
 
   suspend fun check(target: String, code: String, type: CodeType): Boolean {
     val key = "${type}-$target"
-    val result = reactiveStringRedisTemplate.opsForValue().getAndAwait(key) == code
-    if (result) reactiveStringRedisTemplate.delete(key).awaitSingle()
-    return result
+    //    if (result) reactiveStringRedisTemplate.delete(key).awaitSingle()
+    return reactiveStringRedisTemplate.opsForValue().getAndAwait(key) == code
   }
+
+  fun check(target: String, code: String, authenticationType: AuthenticationType): Mono<Boolean> =
+    mono {
+      val codeType = if (authenticationType.isEmail()) CodeType.EMAIL
+      else CodeType.PHONE
+      check(target, code, codeType)
+    }
+
+
 
 }

@@ -22,5 +22,4 @@ class ApplicationConfig {
   fun reactiveStringRedisTemplate(factory: ReactiveRedisConnectionFactory) =
     ReactiveStringRedisTemplate(factory)
 
-
 }

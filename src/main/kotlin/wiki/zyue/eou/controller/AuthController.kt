@@ -1,5 +1,6 @@
 package wiki.zyue.eou.controller
 
+import kotlinx.coroutines.reactor.awaitSingle
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -7,7 +8,7 @@ import reactor.core.publisher.Mono
 import wiki.zyue.eou.component.CodeVerifier
 import wiki.zyue.eou.component.EmailCodeSender
 import wiki.zyue.eou.component.PhoneCodeSender
-import wiki.zyue.eou.model.HttpException
+import wiki.zyue.eou.model.BadRequestException
 import wiki.zyue.eou.model.dto.RegisterEntity
 import wiki.zyue.eou.model.type.CodeType
 import wiki.zyue.eou.service.AuthService
@@ -29,10 +30,9 @@ class AuthController(
   @PostMapping("/register")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   suspend fun register(@Valid @RequestBody entity: RegisterEntity) {
-    val type = if (entity.type.isEmail()) CodeType.EMAIL
-    else CodeType.PHONE
-    val result = codeVerifier.check(entity.authentication, entity.code, type)
-    if (!result) throw HttpException("Code ${entity.code} Error.")
+    val result = codeVerifier.check(entity.authentication, entity.code, entity.type).awaitSingle()
+    if (!result) throw BadRequestException("Code ${entity.code} Error.")
+    if (entity.password != entity.rePassword) throw BadRequestException("Two password do not same.")
     authService.register(entity)
   }
 

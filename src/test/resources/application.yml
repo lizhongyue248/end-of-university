@@ -1,4 +1,6 @@
 spring:
   mongodb:
     embedded:
-      version: latest
+      version: 3.5.5
+  redis:
+    port: 9736
