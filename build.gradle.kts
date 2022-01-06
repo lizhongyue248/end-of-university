@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 plugins {
   id("org.springframework.boot") version "2.6.2"
@@ -97,6 +97,17 @@ tasks.asciidoctor {
   dependsOn(tasks.withType<Test>())
   inputs.dir(snippetsDir)
   configurations(asciidoctorExtensions.name)
+}
+
+tasks.register<Copy>("apiDocument") {
+  group = "documentation"
+  from(tasks.asciidoctor.get().outputDir)
+  into("src/main/resources/static/docs")
+}
+
+tasks.bootJar {
+  dependsOn(tasks.withType<AsciidoctorTask>())
+  dependsOn(tasks.withType<Copy>())
 }
 
 //tasks.withType<BootBuildImage> {

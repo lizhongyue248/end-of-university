@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
+import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
 import org.springframework.http.MediaType
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -37,7 +38,7 @@ import wiki.zyue.eou.service.AuthServiceImpl
  */
 @WebFluxTest(SecurityControllerMocker::class)
 @SpringJUnitWebConfig(EouApplication::class, SecurityConfig::class, SecurityBeanMocker::class)
-@MockBean(UserCoroutineRepository::class, UserRepository::class)
+@MockBean(UserCoroutineRepository::class, UserRepository::class, ReactiveRedisConnectionFactory::class)
 class SecurityConfigTest {
 
   @Autowired
@@ -111,10 +112,6 @@ class SecurityConfigTest {
 
 @TestConfiguration
 private class SecurityBeanMocker {
-
-  @Bean
-  fun passwordEncoder(): PasswordEncoder =
-    PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
   @Bean
   fun authService(): AuthService {

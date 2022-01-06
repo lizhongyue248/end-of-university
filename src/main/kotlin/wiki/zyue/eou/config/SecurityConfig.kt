@@ -42,6 +42,7 @@ class SecurityConfig {
         .pathMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
         .pathMatchers(HttpMethod.POST, REGISTER_URL).permitAll()
         .pathMatchers(HttpMethod.GET, CODE_URL).permitAll()
+        .pathMatchers(HttpMethod.GET, STATIC_RESOURCE).permitAll()
         .anyExchange().authenticated()
     }
     .addFilterAt(authenticationFilter(), SecurityWebFiltersOrder.FORM_LOGIN)

@@ -19,13 +19,14 @@ These APIs are used for authentication and authorization.
 
 The system all APIs follows:
 
-* link:auth.adoc[Auth]
+* link:auth.html[Auth]
 
 [[overview_http_verbs]]
 == HTTP verbs
 
 RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
 
+[cols='1,5']
 |===
 | Verb | Usage
 
@@ -47,6 +48,8 @@ RESTful notes tries to adhere as closely as possible to standard HTTP and REST c
 
 RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
 
+.code
+[cols='1,3']
 |===
 | Status code | Usage
 
