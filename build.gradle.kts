@@ -1,11 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-  id("org.springframework.boot") version "2.7.0-SNAPSHOT"
+  id("org.springframework.boot") version "2.6.2"
   id("io.spring.dependency-management") version "1.0.11.RELEASE"
-  id("org.asciidoctor.convert") version "1.5.8"
-  kotlin("jvm") version "1.6.0"
-  kotlin("plugin.spring") version "1.6.0"
+  id("org.asciidoctor.jvm.convert") version "3.3.2"
+  kotlin("jvm") version "1.6.10"
+  kotlin("plugin.spring") version "1.6.10"
+//  id("org.springframework.experimental.aot") version "0.11.1"
 }
 
 group = "wiki.zyue"
@@ -20,10 +22,12 @@ configurations {
 
 repositories {
   mavenCentral()
+  maven { url = uri("https://repo.spring.io/release") }
   maven { url = uri("https://repo.spring.io/milestone") }
   maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
+val asciidoctorExtensions: Configuration by configurations.creating
 val snippetsDir by extra { file("build/generated-snippets") }
 extra["snippetsDir"] = file("build/generated-snippets")
 
@@ -31,7 +35,7 @@ dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
   implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
-  implementation("org.springframework.boot:spring-boot-starter-graphql")
+//  implementation("org.springframework.boot:spring-boot-starter-graphql")
 //	implementation("org.springframework.boot:spring-boot-starter-mail")
 //	implementation("org.springframework.boot:spring-boot-starter-rsocket")
 //	implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -54,6 +58,7 @@ dependencies {
   implementation("com.querydsl:querydsl-mongodb") {
     exclude("org.mongodb", "mongo-java-driver")
   }
+  asciidoctorExtensions("org.springframework.restdocs:spring-restdocs-asciidoctor")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	runtimeOnly("io.r2dbc:r2dbc-postgresql")
 //	runtimeOnly("org.postgresql:postgresql")
@@ -66,10 +71,11 @@ dependencies {
     exclude("org.slf4j", "slf4j-simple")
   }
   testImplementation("io.projectreactor:reactor-test")
-  testImplementation("org.springframework.graphql:spring-graphql-test")
+//  testImplementation("org.springframework.graphql:spring-graphql-test")
   testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient")
   testImplementation("org.springframework.security:spring-security-test")
 }
+
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
@@ -86,6 +92,14 @@ tasks.test {
   outputs.dir(snippetsDir)
 }
 
+// https://github.com/spring-io/start.spring.io/issues/676#issuecomment-859641317
 tasks.asciidoctor {
+  dependsOn(tasks.withType<Test>())
   inputs.dir(snippetsDir)
+  configurations(asciidoctorExtensions.name)
 }
+
+//tasks.withType<BootBuildImage> {
+//  builder = "paketobuildpacks/builder:tiny"
+//  environment = mapOf("BP_NATIVE_IMAGE" to "true")
+//}

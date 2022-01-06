@@ -1,0 +1,44 @@
+= Authorization API Guide
+Andy Wilkinson;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= Overview
+
+These APIs are used for authentication and authorization.
+
+== Auth code
+
+Get code to action.
+
+[col="1,3"]
+operation::auth_code_EMAIL[snippets='path-parameters']
+
+=== Email Code
+
+`Get` code by Email.
+
+operation::auth_code_EMAIL[snippets='curl-request,httpie-request,http-request,http-response']
+
+=== Phone Code
+
+`Get` code by Phone.
+
+operation::auth_code_PHONE[snippets='curl-request,httpie-request,http-request,http-response']
+
+=== Register Success
+
+A `Post` request register success.
+
+operation::auth_register[snippets='curl-request,httpie-request,http-request,http-response,request-body,request-fields']
+
+=== Register Fail
+
+A `Post` request register fail.
+
+operation::auth_register_error[snippets='curl-request,httpie-request,http-request,http-response,request-body,request-fields,response-body,response-fields']
