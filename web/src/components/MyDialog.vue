@@ -1,4 +1,4 @@
-<script lang="ts" src="./MyDialog.ts"></script>
+<script lang="ts" src="MyDialog.ts"></script>
 
 <template>
   <q-dialog v-model="isDialogOpen">

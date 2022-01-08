@@ -2,7 +2,7 @@ import { h, defineComponent } from 'vue'
 import { QBtn } from 'quasar'
 
 export default defineComponent({
-  name: '404',
+  name: 'NotFound',
   setup () {
     return () => h('div', {
       class: 'fullscreen bg-blue text-white text-center q-pa-md flex flex-center'

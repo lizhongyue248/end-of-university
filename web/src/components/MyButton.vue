@@ -1,4 +1,4 @@
-<script lang="ts" src="./MyButton.ts"></script>
+<script lang="ts" src="MyButton.ts"></script>
 
 <template>
   <div>
