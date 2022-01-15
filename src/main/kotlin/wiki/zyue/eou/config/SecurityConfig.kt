@@ -2,15 +2,17 @@ package wiki.zyue.eou.config
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
-import org.springframework.http.HttpMethod
+import org.springframework.http.HttpMethod.GET
+import org.springframework.http.HttpMethod.POST
 import org.springframework.http.codec.ServerCodecConfigurer
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
+import org.springframework.security.config.web.server.invoke
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers
 import wiki.zyue.eou.config.security.*
 import wiki.zyue.eou.service.AuthService
 import java.security.interfaces.RSAPublicKey
@@ -30,39 +32,30 @@ class SecurityConfig {
   private lateinit var serverCodecConfigurer: ServerCodecConfigurer
 
   @Bean
-  fun springSecurityFilterChain(
-    http: ServerHttpSecurity
-  ): SecurityWebFilterChain = http
-    .httpBasic().disable()
-    .formLogin().disable()
-    .csrf().disable()
-    .logout().disable()
-    .authorizeExchange { exchanges ->
-      exchanges
-        .pathMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
-        .pathMatchers(HttpMethod.POST, REGISTER_URL).permitAll()
-        .pathMatchers(HttpMethod.GET, CODE_URL).permitAll()
-        .pathMatchers(HttpMethod.GET, STATIC_RESOURCE).permitAll()
-        .anyExchange().authenticated()
-    }
-    .addFilterAt(authenticationFilter(), SecurityWebFiltersOrder.FORM_LOGIN)
-    .oauth2ResourceServer { resourceServer ->
-      resourceServer.jwt { jwt ->
-        jwt.publicKey(JwtUtil.getRsaPublicKey() as RSAPublicKey)
+  fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
+    http {
+      httpBasic { disable() }
+      formLogin { disable() }
+      csrf { disable() }
+      logout { disable() }
+      authorizeExchange {
+        authorize(pathMatchers(POST, LOGIN_URL, REGISTER_URL), permitAll)
+        authorize(pathMatchers(GET, CODE_URL, STATIC_RESOURCE), permitAll)
+        authorize(anyExchange, authenticated)
       }
+      addFilterAt(authenticationFilter(), SecurityWebFiltersOrder.FORM_LOGIN)
+      oauth2ResourceServer { jwt { publicKey = JwtUtil.getRsaPublicKey() as RSAPublicKey } }
     }
-    .build()
+
 
   fun authenticationFilter(): AuthenticationWebFilter {
     val authenticationFilter = AuthenticationWebFilter(MultiTypeAuthenticationManager(authService))
-    authenticationFilter.setRequiresAuthenticationMatcher(
-      ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, LOGIN_URL)
-    )
+    authenticationFilter.setRequiresAuthenticationMatcher(pathMatchers(POST, LOGIN_URL))
     authenticationFilter.setAuthenticationFailureHandler(AuthenticationFailureHandler())
+    authenticationFilter.setAuthenticationSuccessHandler(AuthenticationSuccessHandler())
     authenticationFilter.setServerAuthenticationConverter(
       MultiTypeAuthenticationConverter(serverCodecConfigurer)
     )
-    authenticationFilter.setAuthenticationSuccessHandler(AuthenticationSuccessHandler())
     return authenticationFilter
   }
 

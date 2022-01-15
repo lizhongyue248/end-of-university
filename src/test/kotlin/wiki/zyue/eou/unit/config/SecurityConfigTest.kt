@@ -14,8 +14,6 @@ import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
 import org.springframework.http.MediaType
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -33,6 +31,8 @@ import wiki.zyue.eou.service.AuthServiceImpl
 
 
 /**
+ * Security
+ *
  * 2022/1/3 23:18:42
  * @author echo
  */
@@ -42,9 +42,9 @@ import wiki.zyue.eou.service.AuthServiceImpl
 class SecurityConfigTest {
 
   @Autowired
-  lateinit var context: ApplicationContext
+  private lateinit var context: ApplicationContext
 
-  lateinit var rest: WebTestClient
+  private lateinit var rest: WebTestClient
 
   @BeforeEach
   internal fun setUp() {
