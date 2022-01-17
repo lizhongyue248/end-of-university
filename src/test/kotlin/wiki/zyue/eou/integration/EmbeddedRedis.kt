@@ -4,8 +4,12 @@ import org.apache.commons.logging.LogFactory
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties
 import org.springframework.stereotype.Component
 import redis.embedded.RedisServer
+import java.io.IOException
+import java.net.DatagramSocket
+import java.net.ServerSocket
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
+
 
 /**
  * Start an embedded Redis server.
@@ -15,7 +19,7 @@ import javax.annotation.PreDestroy
  */
 @Component
 internal class EmbeddedRedis(
-  redisProperties: RedisProperties
+  private val redisProperties: RedisProperties
 ) {
   private val logger = LogFactory.getLog(this::class.java)
   private val redisServer: RedisServer = RedisServer(redisProperties.port)
@@ -23,7 +27,9 @@ internal class EmbeddedRedis(
   @PostConstruct
   fun postConstruct() {
     logger.info("Redis Test Server Start.")
-    redisServer.start()
+    if (!isPortAvailable(redisProperties.port)) {
+      redisServer.start()
+    }
   }
 
   @PreDestroy
@@ -34,4 +40,11 @@ internal class EmbeddedRedis(
     }
   }
 
+  fun isPortAvailable(port: Int): Boolean {
+    try {
+      ServerSocket(port).use { DatagramSocket(port).use { return true } }
+    } catch (e: IOException) {
+      return false
+    }
+  }
 }

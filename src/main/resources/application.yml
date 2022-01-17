@@ -9,7 +9,24 @@ spring:
     redis:
       key-prefix: eou
       use-key-prefix: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: e1345e7434e995890a74
+            client-secret: ea7d09b35e93fbf0c6f067c50f967a98b06153e5
+            redirect-uri: http://localhost:8080/oauth
+            scope:
+              - user:email
+        provider:
+          github:
+            user-info-uri: https://api.github.com/user
+            user-info-authentication-method: query
+            user-name-attribute: name
+
 logging:
   level:
     org.springframework.security: DEBUG
+    org.springframework.web.reactive: DEBUG
     wiki.zyue.eou: DEBUG

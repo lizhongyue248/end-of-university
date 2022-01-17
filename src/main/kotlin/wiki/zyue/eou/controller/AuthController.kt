@@ -19,6 +19,7 @@ import javax.validation.Valid
  * @author echo
  */
 @RestController
+@ResponseStatus(HttpStatus.NO_CONTENT)
 class AuthController(
   private val authService: AuthService,
   private val emailCodeSender: EmailCodeSender,
@@ -28,7 +29,6 @@ class AuthController(
   private val logger = LogFactory.getLog(this::class.java)
 
   @PostMapping("/register")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
   suspend fun register(@Valid @RequestBody entity: RegisterEntity) {
     val result = codeVerifier.check(entity.authentication, entity.code, entity.type).awaitSingle()
     if (!result) throw BadRequestException("Code ${entity.code} Error.")
@@ -37,7 +37,6 @@ class AuthController(
   }
 
   @GetMapping("/code/{action}/{authentication}/{type}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
   fun code(
     @PathVariable type: CodeType,
     @PathVariable authentication: String,

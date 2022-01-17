@@ -22,7 +22,7 @@ import wiki.zyue.eou.repository.UserRepository
  */
 interface AuthService : ReactiveUserDetailsService {
 
-  fun findByUsername(username: String, password: String): Mono<UserDetails>
+  fun authorizationPassword(authorization: String, password: String): Mono<UserDetails>
 
   fun findByEmailOrPhone(
     type: AuthenticationType, authentication: String, code: String
@@ -56,6 +56,7 @@ class AuthServiceImpl(
   override suspend fun register(entity: RegisterEntity) {
     val user = User().apply {
       name = entity.name
+      username = entity.authentication
       password = passwordEncoder.encode(entity.password)
       roles = listOf(DEFAULT_ROLE)
     }
@@ -68,13 +69,13 @@ class AuthServiceImpl(
       if (userCoroutineRepository.existsByEmail(user.email))
         throw BadRequestException("User ${user.email} is already exists.")
     }
-    if (userCoroutineRepository.existsByName(entity.name))
+    if (userCoroutineRepository.existsByUsername(entity.name))
       throw BadRequestException("User ${user.name} is already exists.")
     userCoroutineRepository.save(user)
   }
 
-  override fun findByUsername(username: String, password: String): Mono<UserDetails> =
-    userRepository.findFirstByName(username)
+  override fun authorizationPassword(authorization: String, password: String): Mono<UserDetails> =
+    userRepository.findFirstByUsernameOrEmailOrPhone(authorization, authorization, authorization)
       .switchIfEmpty(Mono.error(UsernameNotFoundException("User not found.")))
       .filter { passwordEncoder.matches(password, it.password) }
       .switchIfEmpty(Mono.error(AuthenticationException("Password Error.")))
@@ -82,7 +83,7 @@ class AuthServiceImpl(
 
   @Deprecated(
     message = "Use Two Parameters Replace",
-    replaceWith = ReplaceWith("this.findByUsername(user,password)")
+    replaceWith = ReplaceWith("this.authorizationPassword(authorization,password)")
   )
   override fun findByUsername(username: String): Mono<UserDetails> =
     Mono.just(User())

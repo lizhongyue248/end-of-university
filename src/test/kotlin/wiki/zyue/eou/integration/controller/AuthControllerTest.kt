@@ -3,24 +3,18 @@ package wiki.zyue.eou.integration.controller
 import com.nimbusds.jose.shaded.json.JSONObject
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.ApplicationContext
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import org.springframework.http.MediaType
-import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
-import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
-import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration
-import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import reactor.test.StepVerifier
 import wiki.zyue.eou.config.security.AuthenticationType
@@ -32,25 +26,10 @@ import wiki.zyue.eou.integration.*
  */
 @SpringBootTest
 @ExtendWith(RestDocumentationExtension::class)
-internal class AuthControllerTest {
+internal class AuthControllerTest: AbstractControllerTest() {
 
   @Autowired
   lateinit var reactiveStringRedisTemplate: ReactiveStringRedisTemplate
-
-  lateinit var rest: WebTestClient
-
-  @BeforeEach
-  internal fun setUp(
-    context: ApplicationContext, restDocumentation: RestDocumentationContextProvider
-  ) {
-    rest = WebTestClient.bindToApplicationContext(context).configureClient()
-      .baseUrl("https://eou.zyue.wiki").filter(
-        documentationConfiguration(restDocumentation)
-          .operationPreprocessors()
-          .withRequestDefaults(prettyPrint())
-          .withResponseDefaults(prettyPrint())
-      ).build()
-  }
 
   private fun code(action: String, authentication: String, type: AuthenticationType, key: String) {
     rest.get().uri("/code/{action}/{authentication}/{type}", action, authentication, type)

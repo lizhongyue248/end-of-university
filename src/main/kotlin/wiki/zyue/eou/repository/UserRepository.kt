@@ -17,6 +17,10 @@ interface UserRepository : BaseRepository<User> {
 
   fun findFirstByPhone(phone: String): Mono<User>
 
+  fun findFirstByUsername(username: String): Mono<User>
+
+  fun findFirstByUsernameOrEmailOrPhone(username: String, email: String, phone: String): Mono<User>
+
 }
 
 @Repository
@@ -26,6 +30,6 @@ interface UserCoroutineRepository : CoroutineCrudRepository<User, String> {
 
   suspend fun existsByEmail(email: String): Boolean
 
-  suspend fun existsByName(name: String): Boolean
+  suspend fun existsByUsername(name: String): Boolean
 
 }

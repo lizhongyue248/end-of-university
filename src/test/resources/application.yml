@@ -4,3 +4,16 @@ spring:
       version: 3.5.5
   redis:
     port: 9736
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: client-id
+            client-secret: client-secret
+            redirect-uri: http://localhost:8080/oauth
+            scope:
+              - user:email
+        provider:
+          github:
+            user-name-attribute: name

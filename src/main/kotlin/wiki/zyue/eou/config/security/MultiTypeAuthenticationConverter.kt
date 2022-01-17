@@ -26,6 +26,7 @@ class MultiTypeAuthenticationConverter(
       .orElseThrow { IllegalStateException("No JSON reader for UsernamePasswordContent") }
       .readMono(loginParam, request, emptyMap())
       .cast(LoginParam::class.java)
+      .doOnError { throw IllegalStateException("Login Param error ${it.message}.") }
       .map { param ->
         MultiTypeAuthenticationToken(
           param.username,

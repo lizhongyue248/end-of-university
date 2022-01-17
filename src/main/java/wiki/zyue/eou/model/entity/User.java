@@ -1,11 +1,13 @@
 package wiki.zyue.eou.model.entity;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static wiki.zyue.eou.config.security.SecurityConstantKt.DEFAULT_ROLE;
 
 import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,16 +16,24 @@ import wiki.zyue.eou.base.BaseEntity;
 
 /**
  * 2021/12/28 04:58:55
+ *
  * @author echo
  */
 @Entity
 @Document
-public class User extends BaseEntity<User> implements UserDetails  {
+public class User extends BaseEntity<User> implements UserDetails {
+
+  private String avatar = "https://resources.echocow.cn/%E5%8C%BF%E5%90%8D.png";
+
+  @Indexed(unique = true)
+  private String username;
 
   private String password;
 
+  @Indexed(unique = true)
   private String phone;
 
+  @Indexed(unique = true)
   private String email;
 
   private Boolean isExpired = false;
@@ -33,10 +43,21 @@ public class User extends BaseEntity<User> implements UserDetails  {
   private Boolean isCredentialsExpired = false;
 
   @Transient
-  private Collection<String> roles = emptyList();
+  private Collection<String> roles = singletonList(DEFAULT_ROLE);
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles.stream().map(SimpleGrantedAuthority::new).toList();
+    return roles.size() == 0
+        ? singletonList(new SimpleGrantedAuthority(DEFAULT_ROLE))
+        : roles.stream().map(SimpleGrantedAuthority::new).toList();
+  }
+
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public User setAvatar(String avatar) {
+    this.avatar = avatar;
+    return this;
   }
 
   public String getPassword() {
@@ -44,7 +65,12 @@ public class User extends BaseEntity<User> implements UserDetails  {
   }
 
   public String getUsername() {
-    return getName();
+    return username;
+  }
+
+  public User setUsername(String username) {
+    this.username = username;
+    return this;
   }
 
   public boolean isAccountNonExpired() {
@@ -133,24 +159,29 @@ public class User extends BaseEntity<User> implements UserDetails  {
     if (!super.equals(o)) {
       return false;
     }
-    return Objects.equals(getUsername(), user.getUsername()) && Objects.equals(
-        getPassword(), user.getPassword()) && Objects.equals(getPhone(), user.getPhone())
-        && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(
-        isExpired, user.isExpired) && Objects.equals(isLocked, user.isLocked)
+    return Objects.equals(getUsername(), user.getUsername())
+        && Objects.equals(getAvatar(), user.getAvatar())
+        && Objects.equals(getPassword(), user.getPassword())
+        && Objects.equals(getPhone(), user.getPhone())
+        && Objects.equals(getEmail(), user.getEmail())
+        && Objects.equals(isExpired, user.isExpired)
+        && Objects.equals(isLocked, user.isLocked)
         && Objects.equals(isCredentialsExpired, user.isCredentialsExpired)
         && Objects.equals(getRoles(), user.getRoles());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), getUsername(), getPassword(), getPhone(), getEmail(),
-        isExpired, isLocked, isCredentialsExpired, getRoles());
+    return Objects.hash(super.hashCode(), getAvatar(), getUsername(), getPassword(), getPhone(),
+        getEmail(), isExpired, isLocked, isCredentialsExpired, getRoles());
   }
 
   @Override
   public String toString() {
     return "User{" +
-        "password='" + password + '\'' +
+        "avatar='" + avatar + '\'' +
+        ", username='" + username + '\'' +
+        ", password='" + password + '\'' +
         ", phone='" + phone + '\'' +
         ", email='" + email + '\'' +
         ", isExpired=" + isExpired +

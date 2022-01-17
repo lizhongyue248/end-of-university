@@ -11,6 +11,7 @@ import org.springframework.restdocs.snippet.Attributes
 internal const val AUTH_CODE = "auth_code"
 internal const val AUTH_REGISTER = "auth_register"
 internal const val AUTH_REGISTER_ERROR = "auth_register_error"
+internal const val OAUTH_LOGIN_URL = "oauth_login_url"
 internal const val CONSTRAINTS = "constraints"
 internal const val REQUIRE = "require"
 

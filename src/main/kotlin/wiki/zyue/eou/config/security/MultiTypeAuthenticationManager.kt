@@ -29,9 +29,9 @@ class MultiTypeAuthenticationManager(
         token.principal.toString(),
         token.credentials.toString()
       )
-      else -> authService.findByUsername(token.principal.toString(), token.credentials.toString())
+      else -> authService.authorizationPassword(token.principal.toString(), token.credentials.toString())
     }
-    return userDetailsMono.switchIfEmpty(Mono.error { UsernameNotFoundException("User not found") })
+    return userDetailsMono.switchIfEmpty(Mono.error { UsernameNotFoundException("Authentication user not found") })
       .doOnNext(userDetailsChecker::check)
       .map { userDetails ->
         val authenticationToken = MultiTypeAuthenticationToken(

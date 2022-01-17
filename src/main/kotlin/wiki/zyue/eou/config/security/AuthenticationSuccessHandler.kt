@@ -6,34 +6,25 @@ import org.springframework.core.codec.Hints
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.web.server.WebFilterExchange
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler
 import reactor.core.publisher.Mono
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * 2022/1/3 00:59:35
  * @author echo
  */
-class AuthenticationSuccessHandler : ServerAuthenticationSuccessHandler {
+class AuthenticationSuccessHandler(
+  private val authorizationToken: AuthorizationToken
+) : ServerAuthenticationSuccessHandler {
   private val logger = LogFactory.getLog(this::class.java)
 
-  override fun onAuthenticationSuccess(
-    webFilterExchange: WebFilterExchange,
-    authentication: Authentication
-  ): Mono<Void> {
-    val (token, expirationTime) = JwtUtil.encode(authentication, mapOf("a" to "b"))
-    val expiration = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(expirationTime)
+  override fun onAuthenticationSuccess(webFilterExchange: WebFilterExchange, authentication: Authentication): Mono<Void> {
+    val result = authorizationToken.buildAuthenticationResponse(authentication)
+    val expiration = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(result.expire))
     logger.info("${authentication.name} 登录成功, 有效期至 $expiration")
-    val result = AuthenticationResponse(
-      authentication.name,
-      token,
-      toTimestamp(expirationTime),
-      authoritiesToList(authentication.authorities)
-    )
     val exchange = webFilterExchange.exchange
     exchange.response.headers.contentType = MediaType.APPLICATION_JSON
     return exchange.response.writeWith(
@@ -47,9 +38,4 @@ class AuthenticationSuccessHandler : ServerAuthenticationSuccessHandler {
     )
   }
 
-  private fun toTimestamp(expirationTime: LocalDateTime) =
-    expirationTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-
-  private fun authoritiesToList(authorities: MutableCollection<out GrantedAuthority>) =
-    authorities.map(GrantedAuthority::getAuthority)
 }

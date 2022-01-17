@@ -33,12 +33,12 @@ private const val EXIST_SUCCESS_NAME = "Alan success"
 private const val NOT_EXIST_EMAIL = "321@123.com"
 private const val NOT_EXIST_PHONE = "13743214321"
 private const val NOT_EXIST_NAME = "Bob"
-private const val SUCCESS_PASSWORD = "123456"
-private const val FAIL_PASSWORD = "123456"
+private const val SUCCESS_PASSWORD = "Wiley St 4755, Gaines, Suriname, 060173"
+private const val FAIL_PASSWORD = "Mountains Road 3253, Nunez, Gabon, 499719"
 private const val CHECK_CODE_SUCCESS = "123456"
 private const val CHECK_CODE_FAIL = "654321"
 
-internal class AuthServiceTest2 {
+internal class AuthServiceTest {
 
   private val passwordEncoder = BCryptPasswordEncoder()
 
@@ -60,26 +60,34 @@ internal class AuthServiceTest2 {
       // Set exist data.
       `when`(userCoroutineRepository.existsByEmail(EXIST_EMAIL)).thenReturn(true)
       `when`(userCoroutineRepository.existsByPhone(EXIST_PHONE)).thenReturn(true)
-      `when`(userCoroutineRepository.existsByName(EXIST_NAME)).thenReturn(true)
+      `when`(userCoroutineRepository.existsByUsername(EXIST_NAME)).thenReturn(true)
 
       // Set not exist data.
       `when`(userCoroutineRepository.existsByEmail(NOT_EXIST_EMAIL)).thenReturn(false)
       `when`(userCoroutineRepository.existsByPhone(NOT_EXIST_PHONE)).thenReturn(false)
-      `when`(userCoroutineRepository.existsByName(NOT_EXIST_NAME)).thenReturn(false)
+      `when`(userCoroutineRepository.existsByUsername(NOT_EXIST_NAME)).thenReturn(false)
     }
 
     // Find a user.
     `when`(userRepository.findFirstByEmail(EXIST_EMAIL)).thenReturn(Mono.just(User()))
     `when`(userRepository.findFirstByPhone(EXIST_PHONE)).thenReturn(Mono.just(User()))
-    `when`(userRepository.findFirstByName(EXIST_NAME)).thenReturn(Mono.just(User()))
-    `when`(userRepository.findFirstByName(EXIST_SUCCESS_NAME)).thenReturn(
+    `when`(userRepository.findFirstByUsername(EXIST_NAME)).thenReturn(Mono.just(User()))
+    `when`(userRepository.findFirstByUsername(EXIST_SUCCESS_NAME)).thenReturn(
       Mono.just(User().setPassword(passwordEncoder.encode(SUCCESS_PASSWORD)))
     )
 
     // Not find a user.
     `when`(userRepository.findFirstByEmail(NOT_EXIST_EMAIL)).thenReturn(Mono.empty())
     `when`(userRepository.findFirstByPhone(NOT_EXIST_PHONE)).thenReturn(Mono.empty())
-    `when`(userRepository.findFirstByName(NOT_EXIST_NAME)).thenReturn(Mono.empty())
+    `when`(userRepository.findFirstByUsername(NOT_EXIST_NAME)).thenReturn(Mono.empty())
+
+    `when`(userRepository.findFirstByUsernameOrEmailOrPhone(NOT_EXIST_NAME, NOT_EXIST_NAME, NOT_EXIST_NAME)).thenReturn(Mono.empty())
+    `when`(userRepository.findFirstByUsernameOrEmailOrPhone(EXIST_SUCCESS_NAME, EXIST_SUCCESS_NAME, EXIST_SUCCESS_NAME)).thenReturn(
+      Mono.just(User().setPassword(passwordEncoder.encode(SUCCESS_PASSWORD)))
+    )
+    `when`(userRepository.findFirstByUsernameOrEmailOrPhone(EXIST_NAME, EXIST_NAME ,EXIST_NAME)).thenReturn(
+      Mono.just(User().setPassword(passwordEncoder.encode(SUCCESS_PASSWORD)))
+    )
 
     `when`(codeVerifier.check(EXIST_EMAIL, CHECK_CODE_SUCCESS, AuthenticationType.EMAIL))
       .thenReturn(Mono.just(true))
@@ -104,17 +112,17 @@ internal class AuthServiceTest2 {
 
   @Test
   internal fun `Find By Username Success Test`() {
-    monoNotNull(authService.findByUsername(EXIST_SUCCESS_NAME, SUCCESS_PASSWORD))
+    monoNotNull(authService.authorizationPassword(EXIST_SUCCESS_NAME, SUCCESS_PASSWORD))
   }
 
   @Test
   internal fun `Find By Username Fail Test When Exception`() {
     monoExpectException(
-      authService.findByUsername(NOT_EXIST_NAME, SUCCESS_PASSWORD),
+      authService.authorizationPassword(NOT_EXIST_NAME, SUCCESS_PASSWORD),
       UsernameNotFoundException::class.java
     )
     monoExpectException(
-      authService.findByUsername(EXIST_NAME, FAIL_PASSWORD),
+      authService.authorizationPassword(EXIST_NAME, FAIL_PASSWORD),
       AuthenticationException::class.java
     )
   }
