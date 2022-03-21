@@ -46,6 +46,7 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
@@ -92,8 +93,6 @@ const linksList = [
     link: 'https://awesome.quasar.dev'
   }
 ]
-
-import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'MainLayout',

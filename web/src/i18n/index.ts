@@ -1,7 +1,7 @@
 import enUS from './en-US'
-import zhCN from 'src/i18n/zh-CN'
+import zhCN from './zh-CN'
 
 export default {
   'en-US': enUS,
-  'zh-cn': zhCN
+  'zh-CN': zhCN
 }

@@ -1,0 +1,23 @@
+{
+  "paths": {
+    "/aaa/111": {
+      "get": {
+        "responses": {
+          "200": {
+            "table": [
+              {
+                "name": "a",
+                "example": "111",
+                "type": "string"
+              }
+            ],
+            "example": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "disable": []
+}
