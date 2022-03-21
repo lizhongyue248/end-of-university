@@ -1,3 +1,5 @@
+@file:Suppress("SpringDataRepositoryMethodReturnTypeInspection")
+
 package wiki.zyue.eou.repository
 
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository

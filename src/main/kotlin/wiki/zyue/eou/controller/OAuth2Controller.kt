@@ -35,7 +35,7 @@ import wiki.zyue.eou.model.BadRequestException
  */
 @RestController
 @RequestMapping("/oauth/")
-class OAuthController(
+class OAuth2Controller(
   private val clientRegistrationRepository: ReactiveClientRegistrationRepository,
   private val serverOAuth2AuthorizationRequestResolver: ServerOAuth2AuthorizationRequestResolver,
   private val reactiveOAuth2AccessTokenResponseClient: ReactiveOAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>,
@@ -62,14 +62,15 @@ class OAuthController(
     )
       .switchIfEmpty(Mono.error(BadRequestException("Can not find $registrationId registration.")))
       .flatMap { (clientRegistration: ClientRegistration, authorizationRequest: OAuth2AuthorizationRequest) ->
-        val request = OAuth2AuthorizationCodeGrantRequest(
+        OAuth2AuthorizationCodeGrantRequest(
           clientRegistration,
           OAuth2AuthorizationExchange(
             authorizationRequest, convertResponse(clientRegistration, exchange)
           )
-        )
-        reactiveOAuth2AccessTokenResponseClient.getTokenResponse(request)
-          .map { OAuth2UserRequest(clientRegistration, it.accessToken) }
+        ).let { request ->
+          reactiveOAuth2AccessTokenResponseClient.getTokenResponse(request)
+            .map { OAuth2UserRequest(clientRegistration, it.accessToken) }
+        }
       }
       .flatMap { oauth2UserService.loadUser(it) }
       .flatMap { oAuth2User ->

@@ -8,11 +8,12 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.core.RepositoryInformation
 import org.springframework.data.repository.core.RepositoryMetadata
 import org.springframework.data.repository.core.support.RepositoryFactorySupport
-import java.io.Serializable
 import wiki.zyue.eou.base.BaseEntity
+import wiki.zyue.eou.base.impl.ExpandRepositoryFactoryBean.ExpandMongoRepositoryFactory
+import java.io.Serializable
 
 /**
- * This bean will be injected in [wiki.zyue.eou.config.MongodbConfig].
+ * This bean will be injected in [wiki.zyue.eou.config.MongoConfig].
  * It will give a [wiki.zyue.eou.base.ExpandRepository] implement and
  * a [ExpandMongoRepositoryFactory] to create repository.
  *
