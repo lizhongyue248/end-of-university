@@ -10,7 +10,8 @@ const routes: RouteRecordRaw[] = [
     path: '/auth',
     component: () => import('layouts/AuthLayout.vue'),
     children: [
-      { path: 'login', component: () => import('pages/auth/AuthLogin.vue') }
+      { path: 'login', component: () => import('pages/auth/AuthLogin.vue'), meta: { tip: '请输入账号密码' } },
+      { path: 'register', component: () => import('pages/auth/AuthRegister.vue'), meta: { tip: '请填写注册信息' } }
     ]
   },
   // Always leave this as last one,
