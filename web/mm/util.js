@@ -14,6 +14,18 @@ function wrapApiData ({ data, code = 200 }) {
   }
 }
 
+const wrapErrorMessage = (message) => ({
+  error: message,
+  describe: message
+})
+
+const wrapError = (message, describe) => ({
+  error: message,
+  describe
+})
+
 module.exports = {
-  wrapApiData
+  wrapApiData,
+  wrapErrorMessage,
+  wrapError
 }

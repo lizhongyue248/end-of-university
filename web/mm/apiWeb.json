@@ -17,6 +17,18 @@
           }
         }
       }
+    },
+    "/hello": {
+      "get": {
+        "description": "aaa",
+        "responses": {
+          "403": {
+            "example": {
+              "type": "object"
+            }
+          }
+        }
+      }
     }
   },
   "disable": []
