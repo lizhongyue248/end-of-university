@@ -17,10 +17,11 @@ import routes from './routes'
  * with the Router instance.
  */
 
-export default route(function (/* { store, ssrContext } */) {
+export default route((/* { store, ssrContext } */) => {
+  const isHistory = process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
+    : isHistory
 
   return createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),

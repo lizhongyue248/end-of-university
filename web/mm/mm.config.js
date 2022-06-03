@@ -13,6 +13,7 @@ module.exports = util => {
     testPort: 9005,
     replayPort: 9001,
     watch: ['./api/'],
+    route: { '/api/*': '/$1' },
     apiWeb: './apiWeb.json',
     proxy: {
       '/': 'http://www.httpbin.org/', // 后端接口主域

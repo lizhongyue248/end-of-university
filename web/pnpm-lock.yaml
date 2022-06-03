@@ -21,6 +21,7 @@ specifiers:
   eslint-plugin-vue: ^8.7.1
   mockm: ^1.1.26-alpha.17
   pinia: ^2.0.14
+  pinia-plugin-persistedstate: ^1.5.1
   postcss: ^8.4.13
   pug: ^3.0.2
   quasar: ^2.6.6
@@ -40,6 +41,7 @@ dependencies:
   '@quasar/extras': registry.npmmirror.com/@quasar/extras/1.13.6
   axios: registry.npmmirror.com/axios/0.27.2
   pinia: registry.npmmirror.com/pinia/2.0.14_typescript@4.6.4+vue@3.2.33
+  pinia-plugin-persistedstate: registry.npmmirror.com/pinia-plugin-persistedstate/1.5.1_pinia@2.0.14
   quasar: registry.npmmirror.com/quasar/2.6.6
   typed.js: registry.npmmirror.com/typed.js/2.0.12
   umi-request: registry.npmmirror.com/umi-request/1.4.0
@@ -6405,6 +6407,17 @@ packages:
     version: 3.0.0
     engines: {node: '>=4'}
     dev: true
+
+  registry.npmmirror.com/pinia-plugin-persistedstate/1.5.1_pinia@2.0.14:
+    resolution: {integrity: sha512-X0jKWvA3kbpYe8RuIyLaZDEAFvsv3+QmBkMzInBHl0O57+eVJjswXHnIWeFAeFjktrE0cJbGHw2sBMgkcleySQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia-plugin-persistedstate/-/pinia-plugin-persistedstate-1.5.1.tgz}
+    id: registry.npmmirror.com/pinia-plugin-persistedstate/1.5.1
+    name: pinia-plugin-persistedstate
+    version: 1.5.1
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: registry.npmmirror.com/pinia/2.0.14_typescript@4.6.4+vue@3.2.33
+    dev: false
 
   registry.npmmirror.com/pinia/2.0.14_typescript@4.6.4+vue@3.2.33:
     resolution: {integrity: sha512-0nPuZR4TetT/WcLN+feMSjWJku3SQU7dBbXC6uw+R6FLQJCsg+/0pzXyD82T1FmAYe0lsx+jnEDQ1BLgkRKlxA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia/-/pinia-2.0.14.tgz}
