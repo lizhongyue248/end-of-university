@@ -14,8 +14,8 @@
       type="password"
       :rules="[ val => val && val.length >= 6 || '密码是必填项且长度大于等于 6 位']"
     )
-    q-btn.full-width.q-mt-lg(color="primary", label="登录", type="submit")
-    q-btn.full-width.q-my-lg(color="secondary", label="注册", to="/auth/register" )
+    q-btn.full-width.q-mt-lg(color="primary", label="登录", type="submit", :loading="loginLoading", :disable="loginLoading")
+    q-btn.full-width.q-my-lg(color="secondary", label="注册", :to="{ name: Auth.REGISTER }" )
 </template>
 
 <script lang="ts" setup>
@@ -23,15 +23,29 @@
 import { reactive } from 'vue'
 import { useAuthStore } from 'stores/auth-store'
 import { useRouter } from 'vue-router'
+import { Auth } from '@/constant/Routes'
+import { useBoolean } from 'v3hooks'
+import { toRoute } from '@/hooks/toRoute'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const [loginLoading, { toggle: loginToggle }] = useBoolean(false)
 
 const user = reactive({ username: '', password: '' })
+const toLink = toRoute()
 
 const handleLogin = async () => {
-  await authStore.login(user.username, user.password)
-  await router.push({ name: 'Home' })
+  loginToggle()
+  try {
+    await authStore.login(user.username, user.password)
+    if (authStore.hasMultipleRole) {
+      await router.push({ name: Auth.ROLE })
+      return
+    }
+    toLink.singleToHome()
+  } finally {
+    loginToggle()
+  }
 }
 
 </script>

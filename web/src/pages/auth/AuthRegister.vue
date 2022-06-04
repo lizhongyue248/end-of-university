@@ -27,12 +27,13 @@
       :rules="[ val => val && val.length > 6 || '密码是必填项且长度大于 6 位']"
     )
     q-btn.full-width.q-mt-lg(color="secondary", label="注册")
-    q-btn.full-width.q-my-lg(color="primary", label="登录", to="/auth/login")
+    q-btn.full-width.q-my-lg(color="primary", label="登录", :to="{ name: Auth.LOGIN}")
 </template>
 
 <script lang="ts" setup>
 
 import { reactive } from 'vue'
+import { Auth } from '@/constant/Routes'
 
 const user = reactive({ username: '', password: '' })
 
