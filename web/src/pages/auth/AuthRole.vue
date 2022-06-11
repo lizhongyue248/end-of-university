@@ -6,12 +6,12 @@
       RoleInfo(v-if="show.teacher", color="orange", icon="person", text="Teacher", :to="Teacher.HOME")
       RoleInfo(v-if="show.student", color="green", icon="face", text="Student", :to="Student.HOME")
     #auth-role-action.flex.items-center.q-mt-md
-      q-checkbox(v-model="remember", label="Remember this role" )
+      q-checkbox(v-model="remember", :label="$t('tip.rememberRole')" )
       q-space
-      span.text-primary.cursor-pointer(@click="logout") Change Account
+      span.text-primary.cursor-pointer(@click="logout") {{$t('tip.changeAccount')}}
   #auth-role-tip.text-center.q-pb-md(v-else)
     #auth-role-tip-content.text-h6 {{ tipMessage }}
-    q-btn.q-mt-lg(outline, color="primary", label="换个账号登录", size="lg", @click="handleBack")
+    q-btn.q-mt-lg(outline, color="primary", :label="$t('tip.changeAccount')", size="lg", @click="handleBack")
 </template>
 
 <script lang="ts" setup>

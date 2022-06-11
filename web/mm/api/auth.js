@@ -9,7 +9,7 @@ module.exports = util => {
           res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: ['ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT'] })
           return
         }
-        if (username === 'admin' && password === '123456') {
+        if (username === 'admin1' && password === '123456') {
           res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: ['ROLE_ADMIN'] })
           return
         }

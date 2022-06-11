@@ -21,8 +21,8 @@ export const useAuthStore = defineStore({
     hasRole: ({ roles }) => hasRoleCount(roles) > 0
   },
   actions: {
-    async login (user: string, password: string) {
-      const response = await login(user, password)
+    async login (user: string, password: string, remember: boolean) {
+      const response = await login(user, password, remember)
       this.accessToken = response.accessToken
       this.roles = response.roles
       return response.roles

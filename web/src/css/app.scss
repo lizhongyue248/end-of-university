@@ -1,1 +1,11 @@
 // app global css in SCSS form
+@font-face {
+  font-family: 'Jellee';
+  src: url('../assets/font/Jellee.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.logo {
+  font-family: 'Jellee', serif;
+}

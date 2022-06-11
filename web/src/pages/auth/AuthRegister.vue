@@ -1,42 +1,63 @@
 <template lang="pug">
-#auth-login
-  q-form
-    q-input(
+#auth-register
+  #auth-register-head.text-h5.font-bold.q-mb-xs {{$t('title.register')}}
+  q-form.q-mt-sm
+    q-input.q-mt-md(
       v-model="user.username",
-      label="用户名",
+      :label="$t('form.username')",
       lazy-rules,
-      :rules="[ val => val && val.length > 0 || '用户名是必填项']"
+      minLength="6",
+      :rules="[ val => val && val.length >= 6 || $t('rule.requiredMinLength', [ 6 ])]"
     )
-    q-input(
-      v-model="user.username",
-      label="用户名",
+    q-input.q-mt-xs(
+      v-model="user.phone",
+      :label="$t('form.phone')",
       lazy-rules,
-      :rules="[ val => val && val.length > 0 || '用户名是必填项']"
-    )
-    q-input(
-      v-model="user.username",
-      label="用户名",
-      lazy-rules,
-      :rules="[ val => val && val.length > 0 || '用户名是必填项']"
+      :rules="[ val => val && val.length >= 11 || $t('rule.requiredEqualLength', [ 11 ])]",
     )
     q-input(
       v-model="user.password",
-      label="密码",
+      :label="$t('form.password')",
       lazy-rules,
-      type="password"
-      :rules="[ val => val && val.length > 6 || '密码是必填项且长度大于 6 位']"
+      type="password",
+      counter,
+      :rules="[ val => val && val.length >= 6 || $t('rule.requiredMinLength', [ 6 ])]"
     )
-    q-btn.full-width.q-mt-lg(color="secondary", label="注册")
-    q-btn.full-width.q-my-lg(color="primary", label="登录", :to="{ name: Auth.LOGIN}")
+    q-input(
+      v-model="user.rePassword",
+      :label="$t('form.rePassword')",
+      lazy-rules,
+      type="rePassword",
+      counter,
+      :rules="[ val => val && val.length >= 6 || $t('rule.requiredMinLength', [ 6 ])]"
+    )
+    .flex.items-center.q-mt-md
+      q-checkbox(v-model="user.agree", :label="$t('tip.registerAgree')" )
+    #auth-login-action.q-my-lg
+      q-btn.full-width(color="primary", :label="$t('title.register')", type="submit")
+      .q-mt-md.text-center {{$t('tip.login')}}&nbsp;&nbsp;
+        span.text-primary.cursor-pointer(@click="handleToLogin") {{$t('title.login')}}
 </template>
 
 <script lang="ts" setup>
 
 import { reactive } from 'vue'
 import { Auth } from '@/constant/Routes'
+import { useRouter } from 'vue-router'
 
-const user = reactive({ username: '', password: '' })
+const router = useRouter()
 
+const user = reactive({
+  username: '',
+  password: '',
+  rePassword: '',
+  phone: '',
+  agree: false
+})
+
+const handleToLogin = () => {
+  router.push({ name: Auth.LOGIN })
+}
 </script>
 
 <style scoped>
