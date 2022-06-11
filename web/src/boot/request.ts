@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import request, { extend, ResponseError } from 'umi-request'
+import { Notify } from 'quasar'
 
 const defaultErrorMessage: {[key: number]: string} = {
   504: '网关超时',
@@ -18,16 +19,18 @@ const defaultErrorMessage: {[key: number]: string} = {
  */
 const errorHandler = (error: ResponseError) => {
   if (error.response) {
-    const message = defaultErrorMessage[error.response.status] || '未知错误'
-    return {
-      status: error.response.status,
+    const message = (defaultErrorMessage[error.response.status] || '未知错误') + ` ${error.data.description}`
+    Notify.create({
+      icon: 'warning',
       message
-    }
+    })
+    throw new Error(`${error.response.status} ${message}`)
   }
-  return {
-    status: 500,
+  Notify.create({
+    type: 'negative',
     message: error.message
-  }
+  })
+  throw new Error(`500 ${error.message}`)
 }
 
 const api = extend({

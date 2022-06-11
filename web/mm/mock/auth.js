@@ -3,7 +3,7 @@ module.exports = {
     student: 'student',
     teacher: 'teacher',
     administrator: 'administrator',
-    adminAntdTeacher: 'adminAntdTeacher',
+    adminAndTeacher: 'adminAndTeacher',
     noRole: 'noRole'
   },
   password: '123456',

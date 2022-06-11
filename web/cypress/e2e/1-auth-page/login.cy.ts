@@ -82,7 +82,7 @@ describe('User login page test', () => {
   })
 
   it('should admin and teacher login success.', () => {
-    loginSuccessLocalStorageCheck(username.adminAntdTeacher, password, [roles.teacher, roles.admin])
+    loginSuccessLocalStorageCheck(username.adminAndTeacher, password, [roles.teacher, roles.admin])
     cy.url().should('include', '/auth/role')
   })
 
