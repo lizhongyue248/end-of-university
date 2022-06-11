@@ -12,7 +12,7 @@ module.exports = util => {
     port: 9000,
     testPort: 9005,
     replayPort: 9001,
-    watch: ['./api/'],
+    watch: ['./api/', './mock/'],
     route: { '/api/*': '/$1' },
     apiWeb: './apiWeb.json',
     proxy: {

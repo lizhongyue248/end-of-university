@@ -8,8 +8,9 @@
   "scripts": {
     "dev": "quasar dev",
     "test": "vitest",
-    "lint": "eslint --fix --ext .js,.ts,.vue ./",
-    "mm": "npx mockm --cwd=mm"
+    "lint": "eslint --fix --ext .js,.ts,.vue src cypress",
+    "mm": "npx mockm --cwd=mm",
+    "cypress": "cypress open --e2e"
   },
   "dependencies": {
     "@quasar/extras": "^1.14.0",
@@ -32,7 +33,7 @@
     "@typescript-eslint/parser": "^5.27.0",
     "@vitejs/plugin-vue": "^2.3.3",
     "autoprefixer": "^10.4.7",
-    "cypress": "^10.0.1",
+    "cypress": "10.1.0",
     "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-cypress": "^2.12.1",

@@ -1,27 +1,29 @@
 const { wrapErrorMessage } = require('../util.js')
+const data = require('../mock/auth')
+const { roles } = data
 
 module.exports = util => {
   return {
     api: {
       'POST /auth/login' (req, res) {
         const { username, password } = req.body
-        if (username === 'adminAndTeacher' && password === '123456') {
-          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: ['ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT'] })
+        if (username === data.username.adminAntdTeacher && password === data.password) {
+          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: [roles.teacher, roles.admin] })
           return
         }
-        if (username === 'admin1' && password === '123456') {
-          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: ['ROLE_ADMIN'] })
+        if (username === data.username.administrator && password === data.password) {
+          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: [roles.admin] })
           return
         }
-        if (username === 'teacher' && password === '123456') {
-          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: ['ROLE_TEACHER'] })
+        if (username === data.username.teacher && password === data.password) {
+          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: [roles.teacher] })
           return
         }
-        if (username === 'student' && password === '123456') {
-          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: ['ROLE_STUDENT'] })
+        if (username === data.username.student && password === data.password) {
+          res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: [roles.student] })
           return
         }
-        if (username === 'noAuth' && password === '123456') {
+        if (username === data.username.noRole && password === data.password) {
           res.json({ accessToken: util.libObj.mockjs.mock('@word(64)'), roles: [] })
           return
         }
