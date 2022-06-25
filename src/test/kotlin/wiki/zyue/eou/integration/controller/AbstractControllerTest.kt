@@ -16,11 +16,11 @@ abstract class AbstractControllerTest {
   protected lateinit var rest: WebTestClient
 
   @BeforeEach
-  internal fun setUp(
+  internal fun init(
     context: ApplicationContext, restDocumentation: RestDocumentationContextProvider
   ) {
     rest = WebTestClient.bindToApplicationContext(context).configureClient()
-      .baseUrl("https://eou.zyue.wiki").filter(
+      .filter(
         WebTestClientRestDocumentation.documentationConfiguration(restDocumentation)
           .operationPreprocessors()
           .withRequestDefaults(Preprocessors.prettyPrint())

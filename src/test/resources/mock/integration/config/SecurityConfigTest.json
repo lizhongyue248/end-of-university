@@ -1,0 +1,17 @@
+[
+  {
+    "method": "Login Success Test",
+    "data": [
+      {
+        "collection": "wiki.zyue.eou.model.entity.User",
+        "data": [
+          {
+            "username": "201607090217",
+            "password": "{noop}123456",
+            "roles": ["ROLE_STUDENT"]
+          }
+        ]
+      }
+    ]
+  }
+]

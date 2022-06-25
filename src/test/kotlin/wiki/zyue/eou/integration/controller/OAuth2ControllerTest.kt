@@ -125,7 +125,7 @@ internal class OAuth2ControllerTest : AbstractControllerTest() {
           { assertNotNull(response.token) },
           { assertNotNull(response.username) },
           { assertNotNull(response.expire) },
-          { assertTrue(response.authorities.isNotEmpty()) }
+          { assertTrue(response.roles.isNotEmpty()) }
         )
       }
     StepVerifier.create(userRepository.findFirstByEmail(TEST_EMAIL))

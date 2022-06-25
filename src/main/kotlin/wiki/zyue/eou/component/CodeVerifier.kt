@@ -30,6 +30,4 @@ class CodeVerifier(
       check(target, code, codeType)
     }
 
-
-
 }

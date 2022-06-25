@@ -5,11 +5,11 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.mapping.event.ReactiveBeforeConvertCallback
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.security.core.context.SecurityContext
 import reactor.core.publisher.Mono
 import wiki.zyue.eou.base.BaseEntity
-import wiki.zyue.eou.config.security.MultiTypeAuthenticationToken
 import java.time.LocalDateTime
 
 /**
@@ -28,7 +28,7 @@ class MongoConfig {
       ReactiveSecurityContextHolder
         .getContext()
         .map(SecurityContext::getAuthentication)
-        .switchIfEmpty(Mono.just(MultiTypeAuthenticationToken("anonymous", "")))
+        .switchIfEmpty(Mono.just(UsernamePasswordAuthenticationToken("anonymous", "")))
         .map { authentication ->
           val id = (entity as BaseEntity<*>).getId()
           if (id == null) {

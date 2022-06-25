@@ -25,6 +25,9 @@ public class User extends BaseEntity<User> implements UserDetails {
 
   private String avatar = "https://resources.echocow.cn/%E5%8C%BF%E5%90%8D.png";
 
+  /**
+   * Student Number
+   */
   @Indexed(unique = true)
   private String username;
 
@@ -46,7 +49,7 @@ public class User extends BaseEntity<User> implements UserDetails {
   private Collection<String> roles = singletonList(DEFAULT_ROLE);
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles.size() == 0
+    return roles.isEmpty()
         ? singletonList(new SimpleGrantedAuthority(DEFAULT_ROLE))
         : roles.stream().map(SimpleGrantedAuthority::new).toList();
   }

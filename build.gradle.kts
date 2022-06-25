@@ -2,11 +2,11 @@ import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("org.springframework.boot") version "2.6.3"
+  id("org.springframework.boot") version "2.7.0"
   id("io.spring.dependency-management") version "1.0.11.RELEASE"
   id("org.asciidoctor.jvm.convert") version "3.3.2"
-  kotlin("jvm") version "1.6.10"
-  kotlin("plugin.spring") version "1.6.10"
+  kotlin("jvm") version "1.7.0"
+  kotlin("plugin.spring") version "1.7.0"
 //  id("org.springframework.experimental.aot") version "0.11.1"
 }
 
@@ -54,7 +54,7 @@ dependencies {
 //	implementation("org.springframework.security:spring-security-messaging")
 //	implementation("org.springframework.security:spring-security-rsocket")
   implementation("com.querydsl:querydsl-jpa")
-  implementation("com.nimbusds:nimbus-jose-jwt:9.15.2")
+  implementation("com.nimbusds:nimbus-jose-jwt:9.23")
   implementation("com.querydsl:querydsl-mongodb") {
     exclude("org.mongodb", "mongo-java-driver")
   }
@@ -65,11 +65,11 @@ dependencies {
   annotationProcessor("javax.persistence:javax.persistence-api")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
   annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jpa")
+  implementation(platform("org.testcontainers:testcontainers-bom:1.17.2"))
   testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
-  testImplementation("it.ozimov:embedded-redis:0.7.3") {
-    exclude("org.slf4j", "slf4j-simple")
-  }
+  testImplementation("org.testcontainers:testcontainers")
+  testImplementation("org.testcontainers:mongodb")
+  testImplementation("org.testcontainers:junit-jupiter")
   testImplementation("io.projectreactor:reactor-test")
 //  testImplementation("org.springframework.graphql:spring-graphql-test")
   testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient")

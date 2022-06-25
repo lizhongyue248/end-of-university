@@ -41,7 +41,7 @@ class AuthorizationToken(
       .notBeforeTime(Timestamp.valueOf(now))
       .issueTime(Timestamp.valueOf(now))
       .jwtID(UUID.randomUUID().toString())
-      .claim("authorities", authentication.authorities.map(GrantedAuthority::getAuthority))
+      .claim("roles", authentication.authorities.map(GrantedAuthority::getAuthority))
       .let {
         claims.forEach { (key, value) -> it.claim(key, value) }
         it
@@ -65,8 +65,8 @@ class AuthorizationToken(
       .orElseGet {
         val (token, expirationTime) = encode(authentication, attributes)
         val response = AuthenticationResponse(
-          authentication.name,
           token,
+          authentication.name,
           toTimestamp(expirationTime),
           authoritiesToList(authentication.authorities)
         )
